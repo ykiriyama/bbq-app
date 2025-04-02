@@ -38,6 +38,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ✅ 言語選択をページ最上部に移動
+lang = st.radio("🌐 Select Language / 言語を選んでください", ["日本語", "English"])
+lang_key = "ja" if lang == "日本語" else "en"
+
 # 言語辞書
 texts = {
     "ja": {
@@ -67,9 +71,6 @@ texts = {
         "currency": "SGD"
     }
 }
-
-lang = st.radio("🌐 Select Language / 言語を選んでください", ["日本語", "English"])
-lang_key = "ja" if lang == "日本語" else "en"
 t = texts[lang_key]
 
 # タイトルと説明文
