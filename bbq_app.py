@@ -1,51 +1,16 @@
 import streamlit as st
-from datetime import datetime, time
-import time as time_mod
 
 st.set_page_config(page_title="Zero Fuss BBQ", layout="centered")
 
-# ✅ 不要な白い枠や余白を完全除去するCSS
-st.markdown(
-    """
-    <style>
-    div[data-testid="stTextInput"] {
-        padding: 0 !important;
-        margin: 0 !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-    div[data-testid="stTextInput"] input {
-        padding: 6px 10px !important;
-        margin: 0 !important;
-        border: 1px solid #ccc !important;
-        border-radius: 5px !important;
-        background-color: #fff !important;
-        box-shadow: none !important;
-    }
-    div[data-testid="stTextInput"] label {
-        margin-bottom: 4px !important;
-        font-weight: bold;
-    }
-    div[data-testid="stRadio"] {
-        background-color: transparent !important;
-        padding: 0 !important;
-        margin: 0 0 10px 0 !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# ✅ 言語選択をページ最上部に移動
-lang = st.radio("🌐 Select Language / 言語を選んでください", ["日本語", "English"])
+# 言語選択（サイドバーに移動）
+with st.sidebar:
+    lang = st.radio("🌐 言語を選んでください / Select language", ["日本語", "English"])
 lang_key = "ja" if lang == "日本語" else "en"
 
-# 言語辞書
-texts = {
+# テキスト辞書
+t_texts = {
     "ja": {
-        "title": "Zero Fuss BBQ!",
+        "title": "楽々BBQ!",
         "desc": "以下の質問に答えると、サービス料金を自動で見積もります。",
         "people": "1️⃣ 当日は何名様の予定ですか？",
         "shopping": "2️⃣ ショッピング〜お届けサービスをご希望ですか？",
@@ -62,7 +27,7 @@ texts = {
         "desc": "Answer the following questions to get an instant service quote.",
         "people": "1️⃣ How many people will you be serving?",
         "shopping": "2️⃣ Do you want shopping & delivery service?",
-        "shopping_options": ["No (Chef hire only)", "chef hire + shopping and deliver food only", "chef hire + shopping and delivery(Food + Drinks)"],
+        "shopping_options": ["No (Chef hire only)", "chef hire + shopping and deliver food only", "chef hire + shopping and delivery (Food + Drinks)"],
         "result": "📄 Estimate Result",
         "total": "Total Amount",
         "note": "(Food cost not included)",
@@ -71,30 +36,19 @@ texts = {
         "currency": "SGD"
     }
 }
-t = texts[lang_key]
+t = t_texts[lang_key]
 
 # タイトルと説明文
 st.markdown(f"""
-    <div style='background-color:#cc0000;padding:20px;border-radius:10px;text-align:center;'>
-        <h1 style='color:white;font-size:48px;font-weight:bold;margin-bottom:10px;'>{t['title']}</h1>
-        <p style='color:#fff;font-size:18px;margin:0;'>{t['desc']}</p>
-    </div>
+<div style='background-color:#cc0000;padding:20px;border-radius:10px;text-align:center;'>
+    <h1 style='color:white;font-size:48px;font-weight:bold;margin-bottom:10px;'>{t['title']}</h1>
+    <p style='color:#fff;font-size:18px;margin:0;'>{t['desc']}</p>
+</div>
 """, unsafe_allow_html=True)
 
 # 入力セクション
-st.markdown("""
-    <div style='background-color:#ffffff;padding:20px 25px 10px 25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
-""", unsafe_allow_html=True)
-
-people_input = st.text_input(t["people"], value="1")
-people = int(people_input) if people_input.isdigit() else 1
-
-# ラジオボタン直前の余白を最小限に調整
-st.markdown("<div style='margin-top: -20px; margin-bottom: -15px;'></div>", unsafe_allow_html=True)
-
+people = st.number_input(t["people"], min_value=1, step=1)
 option = st.radio(t["shopping"], t["shopping_options"])
-
-st.markdown("</div>", unsafe_allow_html=True)
 
 # 金額計算
 if people < 10:
@@ -114,24 +68,24 @@ else:
 
 total = chef_fee + shopping_fee[option]
 
-# 見積もり表示
-if people > 0:
-    st.markdown("""
-        <div style='background-color:#000;padding:25px;margin-top:20px;border-radius:12px;'>
-            <h2 style='color:#ffffff;text-align:center;margin-bottom:15px;'>📄 {}</h2>
-            <div style='background-color:#cc0000;color:#ffffff;padding:25px;border-radius:12px;text-align:center;'>
-                <h3 style='margin:0;font-size:20px;'>💰 {}</h3>
-                <div style='font-size:36px;font-weight:bold;margin:5px 0;'>{} {}</div>
-                <p style='font-size:13px;color:#ffeeee;'>{}</p>
-            </div>
-        </div>
-    """.format(t["result"], t["total"], total, t['currency'], t['note']), unsafe_allow_html=True)
+# 見積もり結果表示
+st.markdown("""
+<div style='background-color:#000;padding:25px;margin-top:20px;border-radius:12px;'>
+    <h2 style='color:#ffffff;text-align:center;margin-bottom:15px;'>📄 {}</h2>
+    <div style='background-color:#cc0000;color:#ffffff;padding:25px;border-radius:12px;text-align:center;'>
+        <h3 style='margin:0;font-size:20px;'>💰 {}</h3>
+        <div style='font-size:36px;font-weight:bold;margin:5px 0;'>{} {}</div>
+        <p style='font-size:13px;color:#ffeeee;'>{}</p>
+    </div>
+</div>
+""".format(t["result"], t["total"], total, t['currency'], t['note']), unsafe_allow_html=True)
 
-    st.markdown(f"""
-        <div style='text-align:center;margin-top:30px;'>
-            <h3>{t['form_title']}</h3>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header" target="_blank" style="font-size:18px;color:#cc0000;font-weight:bold;">
-                {t['form_link']}
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
+# フォームリンク表示
+st.markdown(f"""
+<div style='text-align:center;margin-top:30px;'>
+    <h3>{t['form_title']}</h3>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header" target="_blank" style="font-size:18px;color:#cc0000;font-weight:bold;">
+        {t['form_link']}
+    </a>
+</div>
+""", unsafe_allow_html=True)
