@@ -53,8 +53,8 @@ st.markdown("""
 
 people = st.number_input(t["people"], min_value=1, step=1)
 
-# ラジオボタン直前のマージンを除去（パディング下を消して詰める）
-st.markdown("<div style='margin-bottom:-15px;'></div>", unsafe_allow_html=True)
+# ↓ 強めに余白を打ち消す（調整済）
+st.markdown("<div style='margin-top: -30px; margin-bottom: -25px;'></div>", unsafe_allow_html=True)
 
 option = st.radio(t["shopping"], t["shopping_options"])
 
