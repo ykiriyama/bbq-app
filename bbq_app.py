@@ -2,31 +2,31 @@ import streamlit as st
 from datetime import datetime, time
 import time as time_mod
 
-st.set_page_config(page_title="BBQ App", layout="centered")
+st.set_page_config(page_title="Zero Fuss BBQ", layout="centered")
 
 # 言語辞書
 texts = {
     "ja": {
-        "title": "🍖 BBQ シェフ派遣サービス",
+        "title": "Zero Fuss BBQ!",
         "desc": "以下の質問に答えると、サービス料金を自動で見積もります。",
         "people": "1️⃣ 当日は何名様の予定ですか？",
         "shopping": "2️⃣ ショッピング〜お届けサービスをご希望ですか？",
         "shopping_options": ["希望しない（シェフ派遣のみ）", "シェフ派遣＋食材のみのショッピング〜お届け", "シェフ派遣＋（食材＋ドリンク）のショッピング〜お届け"],
         "result": "📄 お見積もり結果",
-        "total": "合計金額：",
+        "total": "合計金額",
         "note": "（※食材費は含まれていません）",
         "form_title": "✅ 予約をご希望の方はこちらから",
         "form_link": "📋 Googleフォームで予約する",
         "currency": "SGD"
     },
     "en": {
-        "title": "🍖 BBQ Chef Hire Service",
+        "title": "Zero Fuss BBQ!",
         "desc": "Answer the following questions to get an instant service quote.",
         "people": "1️⃣ How many people will you be serving?",
         "shopping": "2️⃣ Do you want shopping & delivery service?",
         "shopping_options": ["No (Chef hire only)", "chef hire + shopping and deliver food only", "chef hire + shopping and delivery(Food + Drinks)"],
         "result": "📄 Estimate Result",
-        "total": "Total Amount:",
+        "total": "Total Amount",
         "note": "(Food cost not included)",
         "form_title": "✅ Click below to proceed with reservation",
         "form_link": "📋 Reserve via Google Form",
@@ -38,12 +38,25 @@ lang = st.radio("🌐 Select Language / 言語を選んでください", ["日�
 lang_key = "ja" if lang == "日本語" else "en"
 t = texts[lang_key]
 
-st.title(t["title"])
-st.write(t["desc"])
+# タイトルと説明文
+st.markdown(f"""
+    <div style='background-color:#cc0000;padding:20px;border-radius:10px;text-align:center;'>
+        <h1 style='color:white;font-size:48px;font-weight:bold;margin-bottom:10px;'>{t['title']}</h1>
+        <p style='color:#fff;font-size:18px;margin:0;'>{t['desc']}</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# 入力セクション
+st.markdown("""
+    <div style='background-color:#ffffff;padding:25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
+""", unsafe_allow_html=True)
 
 people = st.number_input(t["people"], min_value=1, step=1)
 option = st.radio(t["shopping"], t["shopping_options"])
 
+st.markdown("</div>", unsafe_allow_html=True)
+
+# 金額計算
 if people < 10:
     chef_fee = 200
     shopping_fee = {
@@ -61,24 +74,24 @@ else:
 
 total = chef_fee + shopping_fee[option]
 
+# 見積もり表示
 if people > 0:
-    st.markdown("---")
-    st.subheader(t["result"])
-
-    with st.spinner("計算中..."):
-        time_mod.sleep(0.7)
-        st.markdown(
-            f"""
-            <div style="background-color:#f0f8ff;padding:20px;border-radius:12px;border:2px solid #00aaff">
-                <h2 style="color:#00aaff;margin-top:10px;">💰 {t['total']} <span style=\"color:#000;\">{total} {t['currency']}</span></h2>
-                <p style="margin-top:10px;font-size:13px;color:#777;">{t['note']}</p>
+    st.markdown("""
+        <div style='background-color:#000;padding:25px;margin-top:20px;border-radius:12px;'>
+            <h2 style='color:#ffffff;text-align:center;margin-bottom:15px;'>📄 {}</h2>
+            <div style='background-color:#cc0000;color:#ffffff;padding:25px;border-radius:12px;text-align:center;'>
+                <h3 style='margin:0;font-size:20px;'>💰 {}</h3>
+                <div style='font-size:36px;font-weight:bold;margin:5px 0;'>{} {}</div>
+                <p style='font-size:13px;color:#ffeeee;'>{}</p>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+        </div>
+    """.format(t["result"], t["total"], total, t['currency'], t['note']), unsafe_allow_html=True)
 
-    st.markdown(f"### {t['form_title']}")
-    st.markdown(
-        f"[{t['form_link']}](https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header)",
-        unsafe_allow_html=True
-    )
+    st.markdown(f"""
+        <div style='text-align:center;margin-top:30px;'>
+            <h3>{t['form_title']}</h3>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header" target="_blank" style="font-size:18px;color:#cc0000;font-weight:bold;">
+                {t['form_link']}
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
