@@ -2,6 +2,32 @@ import streamlit as st
 
 st.set_page_config(page_title="Zero Fuss BBQ", layout="centered")
 
+# スマホ対応CSS追加
+st.markdown("""
+<style>
+    @media screen and (max-width: 768px) {
+        h1 {
+            font-size: 7vw !important;
+        }
+        p {
+            font-size: 4vw !important;
+        }
+        h2 {
+            font-size: 5vw !important;
+        }
+        h3 {
+            font-size: 4vw !important;
+        }
+        div[data-testid="stNumberInput"] input {
+            font-size: 16px !important;
+        }
+        div[data-testid="stRadio"] label {
+            font-size: 16px !important;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # 言語選択（サイドバーに移動）
 with st.sidebar:
     lang = st.radio("🌐 言語を選んでください / Select language", ["日本語", "English"])
@@ -84,7 +110,9 @@ st.markdown("""
 st.markdown(f"""
 <div style='text-align:center;margin-top:30px;'>
     <h3>{t['form_title']}</h3>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header" target="_blank" style="font-size:18px;color:#cc0000;font-weight:bold;">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSejyTYZKzsIrtO5as3DVHTMVEGWRVfAj-fcbi2ONhq9Oan0dg/viewform?usp=header" 
+       target="_blank" 
+       style="font-size:18px;color:#cc0000;font-weight:bold;">
         {t['form_link']}
     </a>
 </div>
