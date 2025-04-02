@@ -48,10 +48,14 @@ st.markdown(f"""
 
 # 入力セクション
 st.markdown("""
-    <div style='background-color:#ffffff;padding:25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
+    <div style='background-color:#ffffff;padding:25px 25px 5px 25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
 """, unsafe_allow_html=True)
 
 people = st.number_input(t["people"], min_value=1, step=1)
+
+# ラジオボタン直前のマージンを除去（パディング下を消して詰める）
+st.markdown("<div style='margin-bottom:-15px;'></div>", unsafe_allow_html=True)
+
 option = st.radio(t["shopping"], t["shopping_options"])
 
 st.markdown("</div>", unsafe_allow_html=True)
