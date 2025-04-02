@@ -4,6 +4,40 @@ import time as time_mod
 
 st.set_page_config(page_title="Zero Fuss BBQ", layout="centered")
 
+# ✅ 不要な白い枠や余白を完全除去するCSS
+st.markdown(
+    """
+    <style>
+    div[data-testid="stTextInput"] {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stTextInput"] input {
+        padding: 6px 10px !important;
+        margin: 0 !important;
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+        background-color: #fff !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stTextInput"] label {
+        margin-bottom: 4px !important;
+        font-weight: bold;
+    }
+    div[data-testid="stRadio"] {
+        background-color: transparent !important;
+        padding: 0 !important;
+        margin: 0 0 10px 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # 言語辞書
 texts = {
     "ja": {
@@ -48,13 +82,14 @@ st.markdown(f"""
 
 # 入力セクション
 st.markdown("""
-    <div style='background-color:#ffffff;padding:25px 25px 5px 25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
+    <div style='background-color:#ffffff;padding:20px 25px 10px 25px;border-radius:10px;margin-top:20px;border:2px solid #000;'>
 """, unsafe_allow_html=True)
 
-people = st.number_input(t["people"], min_value=1, step=1)
+people_input = st.text_input(t["people"], value="1")
+people = int(people_input) if people_input.isdigit() else 1
 
-# ↓ 強めに余白を打ち消す（調整済）
-st.markdown("<div style='margin-top: -30px; margin-bottom: -25px;'></div>", unsafe_allow_html=True)
+# ラジオボタン直前の余白を最小限に調整
+st.markdown("<div style='margin-top: -20px; margin-bottom: -15px;'></div>", unsafe_allow_html=True)
 
 option = st.radio(t["shopping"], t["shopping_options"])
 
