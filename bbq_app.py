@@ -28,16 +28,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 言語選択（サイドバーに移動）
-with st.sidebar:
-    lang = st.radio("🌐 言語を選んでください / Select language", ["日本語", "English"])
-lang_key = "ja" if lang == "日本語" else "en"
-
 # テキスト辞書
 t_texts = {
     "ja": {
         "title": "楽々BBQ!",
         "desc": "以下の質問に答えると、サービス料金を自動で見積もります。",
+        "lang_select": "🌐 表示言語を選んでください",
         "people": "1️⃣ 当日は何名様の予定ですか？",
         "shopping": "2️⃣ ショッピング〜お届けサービスをご希望ですか？",
         "shopping_options": ["希望しない（シェフ派遣のみ）", "シェフ派遣＋食材のみのショッピング〜お届け", "シェフ派遣＋（食材＋ドリンク）のショッピング〜お届け"],
@@ -51,6 +47,7 @@ t_texts = {
     "en": {
         "title": "Zero Fuss BBQ!",
         "desc": "Answer the following questions to get an instant service quote.",
+        "lang_select": "🌐 Please select your display language",
         "people": "1️⃣ How many people will you be serving?",
         "shopping": "2️⃣ Do you want shopping & delivery service?",
         "shopping_options": ["No (Chef hire only)", "chef hire + shopping and deliver food only", "chef hire + shopping and delivery (Food + Drinks)"],
@@ -62,6 +59,10 @@ t_texts = {
         "currency": "SGD"
     }
 }
+
+# 言語選択（設問の一部として）
+lang = st.radio("🌐 言語選択 / Language Selection", ["日本語", "English"])
+lang_key = "ja" if lang == "日本語" else "en"
 t = t_texts[lang_key]
 
 # タイトルと説明文
